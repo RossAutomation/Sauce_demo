@@ -12,41 +12,39 @@ SauceDemo is a demo e-commerce application simulating an online store for testin
 
 #### 1.1. Successful Login
 
-**File:** `tests/auth/login.spec.ts`
+**File:** `tests/login.spec.ts`
 
 **Steps:**
-  1. Navigate to https://www.saucedemo.com/
-    - expect: Login page displays username and password fields
-    - expect: Login button is present
-  2. Attempt login with invalid credentials
-    - expect: Page remains on login with error message
-  3. Login with valid credentials (standard_user/secret_sauce)
-    - expect: Redirected to inventory page
-    - expect: Menu button and products are visible
+
+1. Navigate to https://www.saucedemo.com/
+2. Login with valid credentials (standard_user/secret_sauce)
+
+
+    - expect: Redirected to https://www.saucedemo.com/inventory.html
 
 #### 1.2. Invalid Login Attempts
 
-**File:** `tests/auth/login.spec.ts`
+**File:** `tests/login.spec.ts`
 
 **Steps:**
-  1. Enter invalid username and password, click Login
-    - expect: Error message 'Epic sadface: Username and password do not match any user in this service' appears
-  2. Login with locked_out_user
-    - expect: Error message for locked out user
-  3. Login with problem_user
-    - expect: Login succeeds despite problem user
+
+1. Enter invalid username and password, click Login
+
+
+    - expect: Error message is visible
 
 #### 1.3. Logout Functionality
 
-**File:** `tests/auth/logout.spec.ts`
+**File:** `tests/logout.spec.ts`
 
 **Steps:**
-  1. Login with valid credentials
-    - expect: User is logged in
-  2. Click Open Menu button
-    - expect: Menu opens with Logout option
-  3. Click Logout link
-    - expect: Redirected to login page
+
+1. Login with valid credentials
+2. Click Open Menu button
+3. Click Logout link
+
+
+    - expect: Redirected to https://www.saucedemo.com/
 
 ### 2. Product Browsing
 
@@ -54,176 +52,156 @@ SauceDemo is a demo e-commerce application simulating an online store for testin
 
 #### 2.1. View Product Inventory
 
-**File:** `tests/inventory/browse.spec.ts`
+**File:** `tests/inventory/inventory.spec.ts`
 
 **Steps:**
-  1. Login and navigate to inventory
-    - expect: Inventory page displays 6 products with images, titles, descriptions, prices
-  2. Verify product details (names, prices, descriptions)
-    - expect: All product information is correctly displayed
 
-#### 2.2. Product Sorting
+1. Login and navigate to inventory
 
-**File:** `tests/inventory/sort.spec.ts`
 
-**Steps:**
-  1. Select 'Name (A to Z)' from sort dropdown
-    - expect: Products sorted alphabetically A-Z
-  2. Select 'Name (Z to A)' from sort dropdown
-    - expect: Products sorted alphabetically Z-A
-  3. Select 'Price (low to high)' from sort dropdown
-    - expect: Products sorted by price low to high
-  4. Select 'Price (high to low)' from sort dropdown
-    - expect: Products sorted by price high to low
+    - expect: Inventory page displays exactly 6 products
 
-#### 2.3. Product Details View
+#### 2.2. Product Details View
 
-**File:** `tests/inventory/details.spec.ts`
+**File:** `tests/inventory/inventory.spec.ts`, `tests/product-details-view.spec.ts`
 
 **Steps:**
-  1. Click on product title link
-    - expect: Product details page opens with larger image, full description
-  2. Click 'Back to products' button
-    - expect: Back to products button returns to inventory
 
-### 3. Shopping Cart
+1. Login and click on a product title link (item 4)
+
+
+    - expect: URL matches /inventory-item.html/
+    - expect: Product image and description are visible
+
+2. Click 'Back to products' button
+
+
+    - expect: URL returns to https://www.saucedemo.com/inventory.html
+
+### 3. Checkout Process
 
 **Seed:** `tests/seed.spec.ts`
 
-#### 3.1. Add and Remove Items
+#### 3.1. Checkout Information
 
-**File:** `tests/cart/add-remove.spec.ts`
-
-**Steps:**
-  1. Click 'Add to cart' for a product
-    - expect: 'Add to cart' button changes to 'Remove'
-  2. Verify cart icon badge appears
-    - expect: Cart badge shows '1'
-  3. Click 'Remove' button
-    - expect: Button changes back to 'Add to cart'
-  4. Verify cart badge is removed
-    - expect: Cart badge disappears
-
-#### 3.2. View Cart Contents
-
-**File:** `tests/cart/view-cart.spec.ts`
+**File:** `tests/checkout/checkout.spec.ts`
 
 **Steps:**
-  1. Add item to cart and navigate to cart
-    - expect: Cart page displays added items with quantity, description, price
-  2. Click 'Continue Shopping' button
-    - expect: 'Continue Shopping' returns to inventory
-  3. Add item, go to cart, click Remove
-    - expect: 'Remove' removes item from cart
 
-#### 3.3. Multiple Items in Cart
+1. Add item to cart, navigate to cart, click Checkout
+2. Click Continue without filling any fields
 
-**File:** `tests/cart/multiple-items.spec.ts`
 
-**Steps:**
-  1. Add multiple items to cart
-    - expect: Cart badge shows correct count
-  2. Navigate to cart and verify items
-    - expect: All items listed in cart
+    - expect: Error message is visible
 
-#### 3.4. Cart Persistence
+#### 3.2. Checkout Overview
 
-**File:** `tests/cart/persistence.spec.ts`
+**File:** `tests/checkout/checkout.spec.ts`
 
 **Steps:**
-  1. Add items, navigate between pages, return to cart
-    - expect: Items remain in cart after navigation
 
-### 4. Checkout Process
+1. Add item to cart, navigate to cart, click Checkout
+2. Fill checkout info (First Name, Last Name, Zip) and click Continue
+
+
+    - expect: Order total is visible on overview page
+
+3. Click Cancel
+
+
+    - expect: Redirected to https://www.saucedemo.com/inventory.html
+
+#### 3.3. Order Completion
+
+**File:** `tests/checkout/checkout.spec.ts`
+
+**Steps:**
+
+1. Add item to cart, navigate to cart, click Checkout
+2. Fill checkout info and click Continue
+3. Click Finish on the overview page
+
+
+    - expect: Order complete confirmation header is visible
+
+### 4. Navigation and Menu
 
 **Seed:** `tests/seed.spec.ts`
 
-#### 4.1. Checkout Information
+#### 4.1. Menu Navigation
 
-**File:** `tests/checkout/info.spec.ts`
-
-**Steps:**
-  1. Add item to cart, go to cart, click Checkout
-    - expect: Checkout step one displays first name, last name, zip code fields
-  2. Click Continue without filling fields
-    - expect: Error messages for missing required fields
-  3. Fill all fields and click Continue
-    - expect: Proceeds to checkout overview
-
-#### 4.2. Checkout Overview
-
-**File:** `tests/checkout/overview.spec.ts`
+**File:** `tests/menu/menu.spec.ts`
 
 **Steps:**
-  1. Complete checkout info step
-    - expect: Displays item details, payment info, shipping info, price summary
-  2. Verify price calculations
-    - expect: Correct tax and total calculations
-  3. Click Cancel button
-    - expect: Returns to cart
 
-#### 4.3. Order Completion
+1. Login and click Open Menu button
+2. Click 'All Items' link
 
-**File:** `tests/checkout/complete.spec.ts`
+
+    - expect: Redirected to https://www.saucedemo.com/inventory.html
+
+#### 4.2. Social Media Links
+
+**File:** `tests/menu/menu.spec.ts`
 
 **Steps:**
-  1. Click Finish on overview
-    - expect: Order complete page with success message
-  2. Navigate to cart after completion
-    - expect: Cart is empty after completion
-  3. Click 'Back Home' button
-    - expect: 'Back Home' returns to inventory
 
-### 5. Navigation and Menu
+1. Login and click the Twitter/X footer link
+
+
+    - expect: New tab opens to https://x.com/saucelabs
+
+### 5. Error Handling and Edge Cases
 
 **Seed:** `tests/seed.spec.ts`
 
-#### 5.1. Menu Navigation
+#### 5.1. Form Validation
 
-**File:** `tests/menu/navigation.spec.ts`
-
-**Steps:**
-  1. Click Open Menu button
-    - expect: Menu opens with All Items, About, Logout, Reset App State
-  2. Click Close Menu button
-    - expect: Menu closes
-  3. Click About link
-    - expect: Navigates to Sauce Labs website
-  4. Click Reset App State
-    - expect: App state resets (cart empty, etc.)
-
-#### 5.2. Social Media Links
-
-**File:** `tests/menu/social-links.spec.ts`
+**File:** `tests/error/error.spec.ts`
 
 **Steps:**
-  1. Click Twitter, Facebook, LinkedIn links
-    - expect: Links open in new tabs/windows
 
-### 6. Error Handling and Edge Cases
+1. Submit login form with password only (no username)
 
-**Seed:** `tests/seed.spec.ts`
 
-#### 6.1. Form Validation
+    - expect: Error message contains 'Username is required'
 
-**File:** `tests/error/validation.spec.ts`
+2. Submit login form with username only (no password)
 
-**Steps:**
-  1. Submit forms with missing or invalid data
-    - expect: Appropriate error messages
 
-#### 6.2. Boundary Conditions
+    - expect: Error message contains 'Password is required'
 
-**File:** `tests/error/boundary.spec.ts`
+3. Login, add item to cart, proceed to checkout, click Continue without filling info
 
-**Steps:**
-  1. Test with edge case inputs
-    - expect: Handles large quantities or prices gracefully
 
-#### 6.3. Network Issues
+    - expect: Error message contains 'First Name is required'
 
-**File:** `tests/error/network.spec.ts`
+#### 5.2. Boundary Conditions
+
+**File:** `tests/error/error.spec.ts`
 
 **Steps:**
-  1. Simulate network interruptions during checkout
-    - expect: Graceful handling of network failures
+
+1. Login and add all 6 products to cart
+
+
+    - expect: Cart contains exactly 6 items
+
+2. Proceed to checkout and fill info
+
+
+    - expect: Order total displays $140.34
+
+#### 5.3. Network Issues
+
+**File:** `tests/error/error.spec.ts`
+
+**Steps:**
+
+1. Login, add item to cart, proceed through checkout to overview
+2. Set network to offline and click Finish
+
+
+    - expect: URL contains checkout-complete.html
+
+3. Restore network connection

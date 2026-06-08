@@ -1,3 +1,0 @@
-[    4309ms] [ERROR] Provider's accounts list is empty. @ https://x.com/saucelabs:0
-[    4325ms] [WARNING] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. @ https://accounts.google.com/gsi/client:84
-[   64311ms] [ERROR] [GSI_LOGGER]: FedCM get() rejects with NetworkError: Error retrieving a token. @ https://accounts.google.com/gsi/client:85
